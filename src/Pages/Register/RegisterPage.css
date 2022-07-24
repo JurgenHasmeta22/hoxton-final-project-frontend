@@ -29,7 +29,8 @@
   display: grid;
   gap: 1rem;
   /*place-content: space-between;
-  */position: sticky;
+  */
+  position: sticky;
   top: 30px;
   backdrop-filter: blur(10px);
   width: 450px;
