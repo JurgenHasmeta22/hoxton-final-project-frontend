@@ -27,7 +27,6 @@ export default function LoginPage({ validateUser }: any) {
     <>
       {/* @ts-ignore */}
       <HeaderCommon validateUser={validateUser} />
-
       <div className="login-page-wrapper">
         <div className="left-main-wrapper">
           <img
@@ -37,7 +36,6 @@ export default function LoginPage({ validateUser }: any) {
             alt=""
           />
         </div>
-
         <div className="right-main-wrapper">
           <form
             id="login-form"
@@ -46,7 +44,6 @@ export default function LoginPage({ validateUser }: any) {
             }}
           >
             <h1>MovieLandia22</h1>
-
             <label htmlFor="">
               <input
                 type="text"
@@ -58,7 +55,6 @@ export default function LoginPage({ validateUser }: any) {
                 }}
               />
             </label>
-
             <label htmlFor="">
               <input
                 type="password"
@@ -70,11 +66,9 @@ export default function LoginPage({ validateUser }: any) {
                 }}
               />
             </label>
-
             <label htmlFor="">
               <button>Log In</button>
             </label>
-
             <label id="signup-link-wrapper" htmlFor="">
               Don't have an account?{" "}
               <Link id="link" to={"../register"}>
@@ -84,7 +78,6 @@ export default function LoginPage({ validateUser }: any) {
           </form>
         </div>
       </div>
-
       <FooterCommon />
     </>
   );

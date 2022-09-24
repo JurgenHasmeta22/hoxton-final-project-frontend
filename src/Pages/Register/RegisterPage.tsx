@@ -12,8 +12,6 @@ export default function RegisterPage({ validateUser }: any) {
     handlePasswordChangeRegister,
     handleUserNameRegister,
     user,
-    setUser,
-    users,
   } = useStore();
 
   const navigate = useNavigate();
@@ -30,7 +28,6 @@ export default function RegisterPage({ validateUser }: any) {
     <>
       {/* @ts-ignore */}
       <HeaderCommon validateUser={validateUser} />
-
       <div className="signup-page-wrapper">
         <div className="left-main-wrapper">
           <img
@@ -40,7 +37,6 @@ export default function RegisterPage({ validateUser }: any) {
             alt=""
           />
         </div>
-
         <div className="right-main-wrapper">
           <form
             id="signup-form"
@@ -49,7 +45,6 @@ export default function RegisterPage({ validateUser }: any) {
             }}
           >
             <h1>MovieLandia24</h1>
-
             <label id="username" htmlFor="">
               <input
                 type="text"
@@ -60,7 +55,6 @@ export default function RegisterPage({ validateUser }: any) {
                 }}
               />
             </label>
-
             <label htmlFor="">
               <input
                 type="text"
@@ -71,7 +65,6 @@ export default function RegisterPage({ validateUser }: any) {
                 }}
               />
             </label>
-
             <label htmlFor="">
               <input
                 type="password"
@@ -84,11 +77,9 @@ export default function RegisterPage({ validateUser }: any) {
                 }}
               />
             </label>
-
             <label htmlFor="">
               <button>Sign Up</button>
             </label>
-
             <label id="login-link-wrapper" htmlFor="">
               You have an account?
               <Link id="link" to={"../login"}>
@@ -98,7 +89,6 @@ export default function RegisterPage({ validateUser }: any) {
           </form>
         </div>
       </div>
-
       <FooterCommon />
     </>
   );

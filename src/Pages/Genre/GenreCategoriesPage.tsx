@@ -14,7 +14,6 @@ export default function GenreCategoriesPage({ validateUser }: any) {
       .then((resp) => resp.json())
       .then((genresFromServer) => setGenres(genresFromServer));
   }
-
   if (genres[0]?.name === undefined) {
     useEffect(getGenresFromServer, []);
   }
@@ -22,9 +21,7 @@ export default function GenreCategoriesPage({ validateUser }: any) {
   return (
     <div className="genre-categories-menus">
       <HeaderCommon />
-
       <h2>Choose your favorite genre</h2>
-
       <div className="genre-categories-wrapper">
         {genres?.map((genre: any) => (
           <div
@@ -39,7 +36,6 @@ export default function GenreCategoriesPage({ validateUser }: any) {
           </div>
         ))}
       </div>
-
       <FooterCommon />
     </div>
   );

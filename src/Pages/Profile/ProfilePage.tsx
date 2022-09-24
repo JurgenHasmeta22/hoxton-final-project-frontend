@@ -7,19 +7,13 @@ import { useStore } from "../../Zustand/store";
 import "./ProfilePage.css";
 
 export default function ProfilePage({ validateUser }: any) {
-  // #region "state"
-  const [tab, setTab] = useState<any>("home");
   const navigate = useNavigate();
+  const { user } = useStore();
+  const params = useParams();
 
-  const { user, userItem, setUserItem, users } = useStore();
-  // #endregion
-
-  // #region "fetch things"
   useEffect(() => {
     validateUser();
   }, []);
-
-  const params = useParams();
 
   if (user === null || user?.userName === undefined) {
     return (
@@ -35,12 +29,9 @@ export default function ProfilePage({ validateUser }: any) {
     );
   }
 
-  // #endregion
-
   return (
     <main>
       <HeaderCommon />
-
       <section className="container-profile-menus">
         <div className="container-profile-nav">
           <div className="profile-info">
@@ -48,7 +39,6 @@ export default function ProfilePage({ validateUser }: any) {
             <span className="userName-span">{user.userName}</span>
           </div>
         </div>
-
         <div className="container-tabs">
           <ul className="list-tabs">
             <li
@@ -61,7 +51,6 @@ export default function ProfilePage({ validateUser }: any) {
             >
               Favorite Movies
             </li>
-
             <li
               className={params.tab === "aboutUs" ? "clicked" : "about-tab"}
               onClick={() => {
@@ -71,11 +60,9 @@ export default function ProfilePage({ validateUser }: any) {
               About Channel
             </li>
           </ul>
-
           {params.tab === "favoriteMovies" ? (
             <>
               <h3 className="special-video-you">Bookmarked movies</h3>
-
               <div className="container-videos">
                 <ul className="favorite-movies">
                   {user?.favMovies.map((movie: any) => (
@@ -107,7 +94,6 @@ export default function ProfilePage({ validateUser }: any) {
           ) : null}
         </div>
       </section>
-
       <FooterCommon />
     </main>
   );

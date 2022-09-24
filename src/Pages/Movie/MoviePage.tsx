@@ -1,4 +1,3 @@
-// #region "Importing"
 import { useNavigate, useParams } from "react-router-dom";
 import FooterCommon from "../../Components/Common/FooterCommon/FooterCommon";
 import ReactLoading from "react-loading";
@@ -6,13 +5,10 @@ import HeaderCommon from "../../Components/Common/HeaderCommon/HeaderCommon";
 import { useStore } from "../../Zustand/store";
 import { useEffect } from "react";
 import "./MoviePage.css";
-// #endregion
 
 export default function MoviePage({ validateUser }: any) {
-  // #region "State and other hooks"
   const params = useParams();
   const navigate = useNavigate();
-
   const {
     movieItem,
     setMovieItem,
@@ -21,24 +17,6 @@ export default function MoviePage({ validateUser }: any) {
     setUser,
     user,
   } = useStore();
-  // #endregion
-
-  // #region "Validating user if its logged in in each page, localstorage way"
-  useEffect(() => {
-    validateUser();
-  }, []);
-  // #endregion
-
-  // #region "Getting and movies stuff"
-  function getMovieItemFromServer(): void {
-    fetch(`http://localhost:4000/movie/${params.title}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setMovieItem(data);
-      });
-  }
-
-  useEffect(getMovieItemFromServer, [params.title]);
 
   function getLatestMoviesFromServer(): void {
     fetch(`http://localhost:4000/latest`)
@@ -47,19 +25,26 @@ export default function MoviePage({ validateUser }: any) {
         setLatestMovies(latestMoviesFromServer)
       );
   }
-  useEffect(getLatestMoviesFromServer, []);
-  // #endregion
+  function getMovieItemFromServer(): void {
+    fetch(`http://localhost:4000/movie/${params.title}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setMovieItem(data);
+      });
+  }
+  useEffect(() => {
+    validateUser();
+    getLatestMoviesFromServer();
+  }, []);
+  useEffect(getMovieItemFromServer, [params.title]);
 
-  // #region "Adding to favorites feature"
   function addToFavorites() {
     fetch(`http://localhost:4000/favorites`, {
       method: "POST",
-
       headers: {
         "content-type": "application/json",
         Authorization: localStorage.token,
       },
-
       body: JSON.stringify({
         movieId: movieItem?.id,
       }),
@@ -69,9 +54,7 @@ export default function MoviePage({ validateUser }: any) {
         setUser(data);
       });
   }
-  // #endregion
 
-  // #region "Checking stuff wich came from server"
   if (movieItem?.title === null) {
     return (
       <div className="loading-wrapper">
@@ -85,12 +68,10 @@ export default function MoviePage({ validateUser }: any) {
       </div>
     );
   }
-  // #endregion
 
   return (
     <>
       <HeaderCommon />
-
       <section className="movie-item-wrapper">
         <div className="left-section">
           <div className="video-and-servers">
@@ -99,7 +80,6 @@ export default function MoviePage({ validateUser }: any) {
                 <li>Movie Server</li>
               </ul>
             </div>
-
             <div className="video-square">
               <iframe
                 src={movieItem?.videoSrc}
@@ -111,7 +91,6 @@ export default function MoviePage({ validateUser }: any) {
                 allowFullScreen
               ></iframe>
             </div>
-
             <div className="movie-details">
               <div className="movie-specifications">
                 <ul className="trailer">
@@ -120,7 +99,6 @@ export default function MoviePage({ validateUser }: any) {
                     Youtube trailer
                   </a>
                 </ul>
-
                 <ul className="length">
                   <li>Duration: {movieItem?.duration}</li>
                   <li>Year: {movieItem?.releaseYear}</li>
@@ -131,7 +109,6 @@ export default function MoviePage({ validateUser }: any) {
                       : movieItem?.ratingImdb}
                   </li>
                 </ul>
-
                 {user?.userName ? (
                   <button
                     className="button-favorite-add"
@@ -147,16 +124,13 @@ export default function MoviePage({ validateUser }: any) {
               </div>
             </div>
           </div>
-
           <div className="movie-fabula">
             <p id="fabula">{movieItem?.description}</p>
           </div>
-
           <div className="last movies">
             <div className="posted-lastest">
               <h2>Latest Movies</h2>
             </div>
-
             <ul className="last-movies-list">
               {latestMovies.slice(14, 19).map((latestMovie: any) => (
                 <li
@@ -177,24 +151,20 @@ export default function MoviePage({ validateUser }: any) {
             </ul>
           </div>
         </div>
-
         <div className="right-section">
           <ul>
             <li>
               <img src="https://i.imgur.com/5wdcyDG.gif" alt="ddf" />
             </li>
-
             <li>
               <img src="https://www.filma24.so/genti300x300.gif" alt="ggg" />
             </li>
-
             <li>
               <img src="https://i.imgur.com/Wl3zKCb.jpg" alt="eee" />
             </li>
           </ul>
         </div>
       </section>
-
       <FooterCommon />
     </>
   );

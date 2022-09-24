@@ -1,59 +1,53 @@
-// #region "Importing stuff"
 import Carousel from "@palustris/react-images";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import ReactPaginate from "react-paginate";
 import { useNavigate, useParams } from "react-router";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FooterCommon from "../../Components/Common/FooterCommon/FooterCommon";
 import HeaderCommon from "../../Components/Common/HeaderCommon/HeaderCommon";
 import { useStore } from "../../Zustand/store";
 import "./HomePage.css";
-// #endregion
 
 export default function HomePage({ validateUser }: any) {
-  // #region "Hooks for navigate and params"
   const navigate = useNavigate();
   const params = useParams();
-  // #endregion
+  const images = [
+    { source: "http://localhost:4000/images/rsz_fistful_of_vengeance.png" },
+    { source: "http://localhost:4000/images/rsz_texas.png" },
+    { source: "http://localhost:4000/images/rsz_movieposter_en.png" },
+    {
+      source:
+        "http://localhost:4000/images/rsz_wyihsxwyqn8ejsdut2p1p0o97n0.png",
+    },
+    {
+      source:
+        "http://localhost:4000/images/rsz_elevjj3yg279mmpwuygyrhbjbbq.png",
+    },
+  ];
 
-  // #region "Validating user if its logged in in each page, localstorage way"
-  useEffect(() => {
-    validateUser();
-  }, []);
-  // #endregion
-
-  // #region "Getting movie count"
   const [moviesCount, setMoviesCount] = useState<any>();
   const [moviesCountSearch, setMoviesCountSearch] = useState<any>();
+  const { movies, setMovies, latestMovies, setLatestMovies } = useStore();
+  const [pageNumber, setPageNumber] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  let pageCount;
 
   function getMovieCountFromServer(): void {
     fetch(`http://localhost:4000/movie-count`)
       .then((resp) => resp.json())
       .then((movieCountFromServer) => setMoviesCount(movieCountFromServer));
   }
-
   useEffect(getMovieCountFromServer, []);
-  // #endregion
-
-  // #region "Pagination in frontend"
-
-  const [pageNumber, setPageNumber] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-
-  let pagesVisited = pageNumber * itemsPerPage;
-  let pageCount;
 
   if (params.query) {
     pageCount = Math.ceil(moviesCountSearch / itemsPerPage);
   } else {
     pageCount = Math.ceil(moviesCount?.count / itemsPerPage);
   }
-
   function handleChangingPageNumber(selected: any) {
     setPageNumber(selected);
   }
-
   const changePage = ({ selected }: any) => {
     if (params.sort === undefined && params.query === undefined) {
       handleChangingPageNumber(selected);
@@ -66,12 +60,6 @@ export default function HomePage({ validateUser }: any) {
       navigate(`../movies/search/${params.query}/page/${selected + 1}`);
     }
   };
-
-  // #endregion
-
-  // #region "Getting and movies stuff"
-
-  const { movies, setMovies, latestMovies, setLatestMovies } = useStore();
 
   function getMoviesFromServer(): void {
     if (
@@ -97,11 +85,9 @@ export default function HomePage({ validateUser }: any) {
     ) {
       fetch(`http://localhost:4000/search`, {
         method: "POST",
-
         headers: {
           "content-type": "application/json",
         },
-
         body: JSON.stringify({
           title: params.query,
           page: 1,
@@ -115,11 +101,9 @@ export default function HomePage({ validateUser }: any) {
     } else if (params.page && params.query && params.sort === undefined) {
       fetch(`http://localhost:4000/search`, {
         method: "POST",
-
         headers: {
           "content-type": "application/json",
         },
-
         body: JSON.stringify({
           title: params.query,
           page: params.page,
@@ -152,6 +136,17 @@ export default function HomePage({ validateUser }: any) {
         .then((moviesFromServer) => setMovies(moviesFromServer));
     }
   }
+  function getLatestMoviesFromServer(): void {
+    fetch(`http://localhost:4000/latest`)
+      .then((resp) => resp.json())
+      .then((latestMoviesFromServer) =>
+        setLatestMovies(latestMoviesFromServer)
+      );
+  }
+  useEffect(() => {
+    getLatestMoviesFromServer();
+    validateUser();
+  }, []);
 
   if (
     params.page === undefined &&
@@ -183,21 +178,6 @@ export default function HomePage({ validateUser }: any) {
     useEffect(getMoviesFromServer, [params.page]);
   }
 
-  // #region "Latest Movie fetching"
-  function getLatestMoviesFromServer(): void {
-    fetch(`http://localhost:4000/latest`)
-      .then((resp) => resp.json())
-      .then((latestMoviesFromServer) =>
-        setLatestMovies(latestMoviesFromServer)
-      );
-  }
-
-  useEffect(getLatestMoviesFromServer, []);
-  // #endregion
-
-  // #endregion
-
-  // #region "Checking stuff wich came from server"
   if (!movies && movies[0]?.title === undefined) {
     return (
       <div className="loading-wrapper">
@@ -214,65 +194,26 @@ export default function HomePage({ validateUser }: any) {
     return (
       <div className="home-wrapper-menus">
         <HeaderCommon />
-
         <div className="home-ribbon-2">
           <div className="no-search">
             <span>No Search Result or the array is getting populated.</span>
           </div>
         </div>
-
         <FooterCommon />
       </div>
     );
   }
-  // #endregion
-
-  // #region "Carousel stuff images etc"
-
-  function getImages() {
-    let images: any = [];
-
-    if (movies.length !== 0 && movies[0]?.title !== undefined) {
-      console.log(movies);
-
-      return (images = [
-        { source: movies[0]?.photoSrc! },
-        { source: movies[1]?.photoSrc! },
-        { source: movies[2]?.photoSrc! },
-        { source: movies[3]?.photoSrc! },
-        { source: movies[4]?.photoSrc! },
-      ]);
-    }
-  }
-
-  const images = [
-    { source: "http://localhost:4000/images/rsz_fistful_of_vengeance.png" },
-    { source: "http://localhost:4000/images/rsz_texas.png" },
-    { source: "http://localhost:4000/images/rsz_movieposter_en.png" },
-    {
-      source:
-        "http://localhost:4000/images/rsz_wyihsxwyqn8ejsdut2p1p0o97n0.png",
-    },
-    {
-      source:
-        "http://localhost:4000/images/rsz_elevjj3yg279mmpwuygyrhbjbbq.png",
-    },
-  ];
-
-  // #endregion
 
   return (
     <>
       <div className="home-wrapper-menus">
         <HeaderCommon />
-
         {(params.query === undefined || params.query.length === 0) &&
         movies[0]?.title !== undefined ? (
           <div className="home-ribbon-1">
             <Carousel views={images} />
           </div>
         ) : null}
-
         <div className="home-ribbon-2">
           {params.query ? (
             <span className="movie-count-span">
@@ -283,11 +224,9 @@ export default function HomePage({ validateUser }: any) {
               Total movies: {moviesCount?.count}{" "}
             </span>
           )}
-
           {params.query === undefined || params.query.length === 0 ? (
             <>
               <h3>Sort By: </h3>
-
               <ul className="list-sort">
                 <Link to="/movies/sortBy/views">Most viewed (Desc)</Link>
                 <Link to="/movies/sortBy/ratingImdb">Imdb rating (Desc)</Link>
@@ -295,7 +234,6 @@ export default function HomePage({ validateUser }: any) {
               </ul>
             </>
           ) : null}
-
           {movies?.length !== 0 ? (
             <div className="image-ribbon-2-wrapper">
               {movies?.map((movie: any) => (
@@ -315,7 +253,6 @@ export default function HomePage({ validateUser }: any) {
                 >
                   <img src={movie.photoSrc} />
                   <span className="movie-title">{movie.title}</span>
-
                   <div className="genres-holder-span">
                     {movie.genres.map((genre: any) => (
                       <span
@@ -330,7 +267,6 @@ export default function HomePage({ validateUser }: any) {
                       </span>
                     ))}
                   </div>
-
                   <span className="imdb-span">
                     {movie.ratingImdb !== 0
                       ? "Imdb: " + movie.ratingImdb
@@ -344,7 +280,6 @@ export default function HomePage({ validateUser }: any) {
               <span>No Search Result, no movie found with that criteria.</span>
             </div>
           )}
-
           <ReactPaginate
             previousLabel={"< Previous"}
             nextLabel={"Next >"}
@@ -357,14 +292,12 @@ export default function HomePage({ validateUser }: any) {
             activeClassName={"paginationActive"}
           />
         </div>
-
         {(params.query === undefined || params.query.length === 0) &&
         movies?.length !== 0 ? (
           <div className="home-ribbon-3">
             <ul className="list-latest">
               <li className="special-last">LATEST MOVIES</li>
             </ul>
-
             <div className="image-ribbon-3-wrapper">
               {latestMovies?.map((latestMovie: any) => (
                 <div
@@ -383,7 +316,6 @@ export default function HomePage({ validateUser }: any) {
                 >
                   <img src={latestMovie.photoSrc} />
                   <span className="movie-title">{latestMovie.title}</span>
-
                   <div className="genres-holder-span">
                     {latestMovie.genres.map((genre: any) => (
                       <span
@@ -398,7 +330,6 @@ export default function HomePage({ validateUser }: any) {
                       </span>
                     ))}
                   </div>
-
                   <span className="imdb-span">
                     {latestMovie.ratingImdb !== 0
                       ? "Imdb: " + latestMovie.ratingImdb
@@ -409,7 +340,6 @@ export default function HomePage({ validateUser }: any) {
             </div>
           </div>
         ) : null}
-
         <FooterCommon />
       </div>
     </>

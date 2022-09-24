@@ -6,9 +6,13 @@ import "./HeaderCommon.css";
 
 export default function HeaderCommon(this: any) {
   const navigate = useNavigate();
-
   const { setUser, setSearchTerm, user, genres, setGenres, searchTerm } =
     useStore();
+
+  const options: any = [];
+  for (const genre of genres) {
+    options.push({ value: genre.name, label: genre.name });
+  }
 
   function handleLogOut(e: any) {
     e.preventDefault();
@@ -16,47 +20,32 @@ export default function HeaderCommon(this: any) {
     setUser(null);
     navigate("/login");
   }
-
   function redirectToProfile(user: any) {
     navigate(`../profile`);
   }
-
-  // #region "DropDown and getting genres from server stuff"
   function getGenresFromServer(): void {
     fetch(`http://localhost:4000/genres`)
       .then((resp) => resp.json())
       .then((genresFromServer) => setGenres(genresFromServer));
   }
-
   useEffect(getGenresFromServer, []);
-
-  const options: any = [];
-
-  for (const genre of genres) {
-    options.push({ value: genre.name, label: genre.name });
-  }
-  // #endregion
 
   return (
     <>
       <header className="header">
         <div className="header-group-1">
           <Link to="/movies">MovieLand24</Link>
-
           <ul className="list-nav">
             <div className="div-inside-li">
               <img src="/assets/logos/ico_filma_blu.png" alt="" />
-
               <NavLink to="../movies" className="special-uppercase">
                 Movies
               </NavLink>
             </div>
-
             <div className="div-inside-li-special">
               <div className="dropdown">
                 <div className="genre-drop">
                   <img src="/assets/logos/list_blu.png" alt="" />
-
                   <li
                     className="special-uppercase"
                     onClick={function (e) {
@@ -67,7 +56,6 @@ export default function HeaderCommon(this: any) {
                     Genres
                   </li>
                 </div>
-
                 <div className="dropdown-content">
                   <ul>
                     {genres.map((genre: any) => (
@@ -86,17 +74,14 @@ export default function HeaderCommon(this: any) {
                 </div>
               </div>
             </div>
-
             <div className="div-inside-li">
               <img src="/assets/logos/netflix-red.png" alt="" />
-
               <NavLink to="../genres/NETFLIX" className="special-uppercase">
                 Netflix
               </NavLink>
             </div>
           </ul>
         </div>
-
         <div className="header-group-2">
           <form
             className="button-search"
@@ -115,7 +100,6 @@ export default function HeaderCommon(this: any) {
               aria-label="Search through site content"
               onChange={function (e) {
                 navigate(`../movies/search/${e.target.value}`);
-
                 if (e.target.value.length > 0) {
                   setSearchTerm(e.target.value);
                   navigate(`../movies/search/${e.target.value}`);
@@ -125,12 +109,10 @@ export default function HeaderCommon(this: any) {
                 }
               }}
             />
-
             <button type="submit">
               <i className="fa fa-search"></i>
             </button>
           </form>
-
           {user === null ? (
             <button
               className="button-login-header"
@@ -152,7 +134,6 @@ export default function HeaderCommon(this: any) {
                 <img src={`/assets/avatars/blankavatar.jpg`} />
                 {user.userName}
               </li>
-
               <div className="dropdown-content">
                 <button
                   className="log-out"

@@ -6,11 +6,9 @@ export default function ErrorPage() {
   return (
     <>
       <HeaderCommon />
-
       <div className="error-wrapper">
         <span>ERROR 404</span>
       </div>
-
       <FooterCommon />
     </>
   );

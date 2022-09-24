@@ -1,4 +1,3 @@
-// #region "Importing"
 import HomePage from "./Pages/Home/HomePage";
 import MoviePage from "./Pages/Movie/MoviePage";
 import LoginPage from "./Pages/Login/LoginPage";
@@ -7,23 +6,18 @@ import GenrePage from "./Pages/Genre/GenrePage";
 import ProfilePage from "./Pages/Profile/ProfilePage";
 import ErrorPage from "./Pages/Error/ErrorPage";
 import GenreCategoriesPage from "./Pages/Genre/GenreCategoriesPage";
-
 //@ts-ignore
 import { addBackToTop } from "vanilla-back-to-top";
-
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-
 import "./App.css";
 import { useStore } from "./Zustand/store";
-// #endregion
 
 function App() {
-  // #region "Validating user fucntion"
   const { setUser } = useStore();
 
   function validateUser() {
@@ -43,19 +37,12 @@ function App() {
         });
     }
   }
-  // #endregion
 
   return (
     <>
       {addBackToTop()}
-
       <Routes>
-        {
-          //#region "Default routes"
-        }
-
         <Route index element={<Navigate replace to="/movies" />} />
-
         <Route
           path="*"
           element={
@@ -63,15 +50,6 @@ function App() {
             <ErrorPage validateUser={validateUser} />
           }
         />
-
-        {
-          //#endregion
-        }
-
-        {
-          //#region "Movies Routes with pagination with TITLE params and individual Movie"
-        }
-
         <Route
           path="/movies"
           element={
@@ -79,7 +57,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/movies/page/:page"
           element={
@@ -87,7 +64,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/movies/:title"
           element={
@@ -95,15 +71,6 @@ function App() {
             <MoviePage validateUser={validateUser} />
           }
         />
-
-        {
-          //#endregion
-        }
-
-        {
-          //#region "Movies Routes with pagination and SEARCH params"
-        }
-
         <Route
           path="/movies/search/:query"
           element={
@@ -111,7 +78,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/movies/search/"
           element={
@@ -119,7 +85,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/movies/search/:query/page/:page"
           element={
@@ -127,15 +92,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
-        {
-          // #endregion
-        }
-
-        {
-          //#region "Movies Routes with pagination and SORT params"
-        }
-
         <Route
           path="/movies/sortBy/:sort"
           element={
@@ -143,7 +99,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/movies/sortBy/:sort/page/:page"
           element={
@@ -151,15 +106,6 @@ function App() {
             <HomePage validateUser={validateUser} />
           }
         />
-
-        {
-          //#endregion
-        }
-
-        {
-          //#region "Login, Registration, Profile Routes"
-        }
-
         <Route
           path="/profile"
           element={
@@ -167,7 +113,6 @@ function App() {
             <ProfilePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/profile/:tab"
           element={
@@ -175,7 +120,6 @@ function App() {
             <ProfilePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/login"
           element={
@@ -185,7 +129,6 @@ function App() {
             />
           }
         />
-
         <Route
           path="/register"
           element={
@@ -195,15 +138,6 @@ function App() {
             />
           }
         />
-
-        {
-          //#endregion
-        }
-
-        {
-          //#region "Genres Routes with pagination and NAME params"
-        }
-
         <Route
           path="/genres"
           element={
@@ -211,7 +145,6 @@ function App() {
             <GenreCategoriesPage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/genres/:name"
           element={
@@ -219,7 +152,6 @@ function App() {
             <GenrePage validateUser={validateUser} />
           }
         />
-
         <Route
           path="/genres/:name/page/:page"
           element={
@@ -229,10 +161,6 @@ function App() {
             />
           }
         />
-
-        {
-          //#endregion
-        }
       </Routes>
     </>
   );

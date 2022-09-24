@@ -9,7 +9,6 @@ export default interface AppStoreState {
   comments: any;
   favorites: any;
   latestMovies: any;
-
   setComments: (array: any) => void;
   setSearchTerm: (string: string) => void;
   setMovieItem: (data: any) => void;
@@ -22,7 +21,6 @@ export default interface AppStoreState {
 
   emailLogin: string;
   passwordLogin: string;
-
   handleEmailChangeLogin: (e: any) => void;
   handlePasswordChangeLogin: (e: any) => void;
   handleFormSubmitLogin: (e: any) => void;
@@ -30,7 +28,6 @@ export default interface AppStoreState {
   userNameRegister: string;
   emailRegister: string;
   passwordRegister: string;
-
   handleFormSubmitRegister: (e: any) => void;
   handleUserNameRegister: (e: any) => void;
   handleEmailRegister: (e: any) => void;
